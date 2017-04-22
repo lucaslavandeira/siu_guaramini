@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <vector>
 #include "common_split.h"
 #include "TSVParser.h"
 
@@ -19,7 +21,7 @@ std::vector<std::string> TSVParser::parse_row() {
     char line[256];
     f.getline(line, 256);
     std::string input(line);
-    if(f.eof()) {
+    if (f.eof()) {
         throw 1;
     }
 
