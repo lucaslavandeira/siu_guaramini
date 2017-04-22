@@ -4,23 +4,24 @@
 #include <vector>
 #include <map>
 #include "common_split.h"
+#include "Socket.h"
+#include "Client.h"
 
 const std::map<std::string, std::string> commands {
-    {std::string("listarMaterias"), std::string("lm")},
-    {std::string("listarInscripciones"), std::string("li")},
-    {std::string("inscribir"), std::string("in")},
-    {std::string("desinscribir"), std::string("de")}
+        {std::string("listarMaterias"), std::string("lm")},
+        {std::string("listarInscripciones"), std::string("li")},
+        {std::string("inscribir"), std::string("in")},
+        {std::string("desinscribir"), std::string("de")}
 };
 
-
-void parse_command(std::string& input) {
+std::string parse_command(std::string& input) {
     std::vector<std::string> params = split(input, ' ');
     std::string cmd;
     try {
         cmd = commands.at(params.at(0));
     } catch (std::out_of_range) {
         std::cout << "Wrong command!" << std::endl;
-        return;
+        return "";
     }
 
     std::string result;
@@ -29,7 +30,7 @@ void parse_command(std::string& input) {
     for (auto it = params.begin()+1; it != params.end(); it ++) {
         result += "-" + *it;
     }
-    std::cout << result;
+    return result;
 }
 
 int main(int argc, char** argv) {
@@ -38,8 +39,9 @@ int main(int argc, char** argv) {
     char line[256];
     f.getline(line, 256);
     std::string input(line);*/
+
     if (argc < 4) {
-        return 1;
+        return 0;
     }
 
     int port = atoi(argv[2]);
@@ -51,11 +53,18 @@ int main(int argc, char** argv) {
     }
 
 
-    std::cout << user_type;
-
     std::string input;
-    getline(std::cin, input);
+    Client c(argv[1], port, argv[3]);
+    while (1) {
+        getline(std::cin, input);
+        std::string result = parse_command(input);
+        std::string response = c.send(result);
 
-    parse_command(input);
+        if (response == "quit") {
+            break;
+        }
+        std::cout << response;
+    }
+
     return 0;
 }
