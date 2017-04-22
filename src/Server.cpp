@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <utility>
+#include <sstream>
 #include "Server.h"
 #include "common_split.h"
 
@@ -28,31 +30,56 @@ Server::Server(int port) :
     while (!subject_parser.eof()) {
         std::vector<std::string> row = subject_parser.parse_row();
 
-        int subject = std::stoi(row.at(0));
-        int course = std::stoi(row.at(1));
+        int subject_id = std::stoi(row.at(0));
+        int course_id = std::stoi(row.at(1));
         std::string name = std::move(row.at(2));
         int teacher_id = std::stoi(row.at(3));
         std::string teacher = teachers.at(teacher_id).c_str();
         int quota = std::stoi(row.at(4));
 
-        courses.push_back(Course(subject, course, name, teacher, quota));
+        Course course(course_id, name, teacher, quota);
+
+        // Create if it doesn't already exist
+        if (subjects.find(subject_id) == subjects.end()) {
+            std::vector<Course> subject;
+            subjects[subject_id] = subject;
+        }
+
+        subjects[subject_id].push_back(course);
     }
 }
 
 std::string Server::receive(const std::string &msg) {
     std::vector<std::string> args = split(msg, '-');
-
     if (args.at(0) == "lm") {
         return listSubjects();
+    } else if (args.at(0) == "in") {
+        int subject_id = std::stoi(args.at(1));
+        int course_id = std::stoi(args.at(2));
+        return subscribe(subject_id, course_id);
     } else {
         return "quit";
     }
 }
 
 std::string Server::listSubjects() {
-    std::string result;
-    for (Course c: courses) {
-        result += c.print();
+    std::stringstream result;
+    for (std::pair<const int, std::vector<Course>> pair: subjects) {
+        for (Course c: pair.second) {
+            result << pair.first << " - " << c.get_name() <<
+                   ", Curso " << c.get_course() <<
+                   ", " << c.get_teacher() << ", "
+                   << c.get_remaining_spots() << " vacantes." << std::endl;
+        }
     }
-    return result;
+    return result.str();
+}
+
+std::string Server::subscribe(int subject_id, int course_id) {
+    bool subject_found = false;
+    for (Course c: courses) {
+        if (c.get_course() == course_id) {
+        }
+    }
+    return "";
 }

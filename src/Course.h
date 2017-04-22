@@ -2,18 +2,25 @@
 #define TP3TALLER_COURSE_H
 
 #include <string>
+#include <vector>
+
 class Course {
-    int subject_id;
     int course_id;
     std::string name;
     std::string teacher;
     int quota;
-    int subs = 0;
+
+    std::vector<int> students;
 public:
-    Course(int subject_id, int course_id, std::string name,
+    Course(int course_id, std::string name,
            std::string teacher, int quota);
 
-    std::string print();
+    void subscribe(int student_id);
+
+    int get_course();
+    std::string get_name();
+    std::string get_teacher();
+    int get_remaining_spots();
 };
 
 

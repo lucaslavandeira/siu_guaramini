@@ -10,6 +10,7 @@
 
 class Server {
     Socket s;
+    std::map<int, std::vector<Course>> subjects;
     std::vector<Course> courses;
     std::map<int, std::string> students;
     std::map<int, std::string> teachers;
@@ -21,6 +22,7 @@ public:
 
 private:
     std::string listSubjects();
+    std::string subscribe(int subject_id, int course_id);
 };
 
 
