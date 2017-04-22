@@ -38,6 +38,21 @@ int main(int argc, char** argv) {
     char line[256];
     f.getline(line, 256);
     std::string input(line);*/
+    if (argc < 4) {
+        return 1;
+    }
+
+    int port = atoi(argv[2]);
+    std::string user_type = argv[3];
+    char* user_id = argv[4];
+    if (user_type != "admin") {
+        user_type += "-";
+        user_type += user_id;  // 4 = user id
+    }
+
+
+    std::cout << user_type;
+
     std::string input;
     getline(std::cin, input);
 
