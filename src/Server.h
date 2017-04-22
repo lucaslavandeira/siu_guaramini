@@ -21,7 +21,9 @@ public:
 
 private:
     std::string listSubjects();
+    std::string listSubs();
     std::string subscribe(int subject_id, int course_id);
+    std::string desubscribe(int subject_id, int course_id);
 };
 
 

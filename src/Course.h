@@ -16,8 +16,9 @@ public:
     Course(int course_id, std::string name,
            std::string teacher, int quota);
 
-    bool subscribe(const int& student_id);
-
+    bool subscribe(int student_id);
+    bool desubscribe(int student_id);
+    bool is_subscribed(int student_id);
     int get_course();
     std::string get_name();
     std::string get_teacher();

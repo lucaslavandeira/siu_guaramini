@@ -55,10 +55,16 @@ std::string Server::receive(const std::string &msg) {
     std::vector<std::string> args = split(msg, '-');
     if (args.at(0) == "lm") {
         return listSubjects();
+    } else if (args.at(0) == "li") {
+        return listSubs();
     } else if (args.at(0) == "in") {
         int subject_id = std::stoi(args.at(1));
         int course_id = std::stoi(args.at(2));
         return subscribe(subject_id, course_id);
+    } else if (args.at(0) == "de") {
+        int subject_id = std::stoi(args.at(1));
+        int course_id = std::stoi(args.at(2));
+        return desubscribe(subject_id, course_id);
     } else {
         return "quit";
     }
@@ -72,6 +78,21 @@ std::string Server::listSubjects() {
                    ", Curso " << c.get_course() <<
                    ", " << c.get_teacher() << ", "
                    << c.get_remaining_spots() << " vacantes." << std::endl;
+        }
+    }
+    return result.str();
+}
+
+
+std::string Server::listSubs() {
+    std::stringstream result;
+    for (std::pair<const int, std::vector<Course>> pair: subjects) {
+        for (Course c: pair.second) {
+            if (c.is_subscribed(student)) {
+                result << pair.first << " - " << c.get_name() << ", Curso " <<
+                       c.get_course() << ", " << c.get_teacher() <<
+                       "." << std::endl;
+            }
         }
     }
     return result.str();
@@ -109,3 +130,22 @@ std::string Server::subscribe(int subject_id, int course_id) {
 
     return result.str();
 }
+
+std::string Server::desubscribe(int subject_id, int course_id) {
+    std::stringstream result;
+    for (auto it = subjects.begin(); it != subjects.end(); it ++) {
+        if (it->first == subject_id) {
+            for (auto jt = it->second.begin(); jt != it->second.end(); jt++) {
+                if (jt->get_course() == course_id) {
+                    bool done = jt->desubscribe(student);
+                    if (done) {
+                        return "Desinscripción exitosa\n";
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    return "Desinscripción inválida\n";
+}
+
