@@ -28,11 +28,12 @@ Server::Server(int port) :
     while (!subject_parser.eof()) {
         std::vector<std::string> row = subject_parser.parse_row();
 
-        int subject = atoi(row.at(0).c_str());
-        int course = atoi(row.at(1).c_str());
+        int subject = std::stoi(row.at(0));
+        int course = std::stoi(row.at(1));
         std::string name = std::move(row.at(2));
-        std::string teacher = teachers.at(atoi(row.at(3).c_str())).c_str();
-        int quota = atoi(row.at(4).c_str());
+        int teacher_id = std::stoi(row.at(3));
+        std::string teacher = teachers.at(teacher_id).c_str();
+        int quota = std::stoi(row.at(4));
 
         courses.push_back(Course(subject, course, name, teacher, quota));
     }
