@@ -9,7 +9,6 @@ Socket::~Socket() {
 }
 
 void Socket::send(const std::string &msg) {
-    std::cout << "Message from client: " << msg << std::endl;
 }
 
 void Socket::recv(std::string &msg) {

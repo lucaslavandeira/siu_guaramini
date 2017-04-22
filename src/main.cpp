@@ -6,6 +6,7 @@
 #include "common_split.h"
 #include "Socket.h"
 #include "Client.h"
+#include "Server.h"
 
 const std::map<std::string, std::string> commands {
         {std::string("listarMaterias"), std::string("lm")},
@@ -55,11 +56,12 @@ int main(int argc, char** argv) {
 
     std::string input;
     Client c(argv[1], port, argv[3]);
+    Server s(port);
     while (1) {
         getline(std::cin, input);
         std::string result = parse_command(input);
-        std::string response = c.send(result);
-
+        c.send(result);
+        std::string response = s.receive(result);
         if (response == "quit") {
             break;
         }
