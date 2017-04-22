@@ -13,7 +13,7 @@ public:
     Course(int subject_id, int course_id, std::string name,
            int teacher_id, int quota);
 
-    void print();
+    std::string print();
 };
 
 

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 #include "Course.h"
 
 Course::Course(int subject_id, int course_id, std::string name, int teacher_id,
@@ -12,9 +13,12 @@ Course::Course(int subject_id, int course_id, std::string name, int teacher_id,
 {
 }
 
-// Debug method
-void Course::print() {
-    std::cout << name << ": Subject " << subject_id << ", Course " <<
-              course_id << ", Teacher " << teacher_id << std::endl;
+std::string Course::print() {
+    std::ostringstream a;
+    a << subject_id << " - " << name << ", Curso " << course_id << ", " <<
+         teacher_id << ", " << quota - subs << " vacantes." << std::endl;
+
+    return a.str();
 }
+
 

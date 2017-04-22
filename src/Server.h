@@ -18,6 +18,9 @@ public:
     ~Server();
 
     std::string receive(const std::string &msg);
+
+private:
+    std::string listSubjects();
 };
 
 

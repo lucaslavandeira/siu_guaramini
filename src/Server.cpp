@@ -48,5 +48,18 @@ Server::Server(int port) :
 
 std::string Server::receive(const std::string &msg) {
     std::vector<std::string> args = split(msg, '-');
-    return "quit";
+
+    if (args.at(0) == "lm") {
+        return listSubjects();
+    } else {
+        return "quit";
+    }
+}
+
+std::string Server::listSubjects() {
+    std::string result;
+    for (Course c: courses) {
+        result += c.print();
+    }
+    return result;
 }
