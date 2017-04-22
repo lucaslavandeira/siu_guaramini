@@ -76,10 +76,5 @@ std::string Server::listSubjects() {
 }
 
 std::string Server::subscribe(int subject_id, int course_id) {
-    bool subject_found = false;
-    for (Course c: courses) {
-        if (c.get_course() == course_id) {
-        }
-    }
     return "";
 }

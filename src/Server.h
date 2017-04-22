@@ -11,7 +11,6 @@
 class Server {
     Socket s;
     std::map<int, std::vector<Course>> subjects;
-    std::vector<Course> courses;
     std::map<int, std::string> students;
     std::map<int, std::string> teachers;
 public:
