@@ -79,24 +79,24 @@ std::string Server::listSubjects() {
 
 std::string Server::subscribe(int subject_id, int course_id) {
     std::stringstream result;
-    for (std::pair<const int, std::vector<Course>> pair: subjects) {
-        if (pair.first == subject_id) {
-            for (Course& c: pair.second) {
-                if (c.get_course() == course_id) {
-                    if (!c.get_remaining_spots()) {
+    for (auto it = subjects.begin(); it != subjects.end(); it ++) {
+        if (it->first == subject_id) {
+            for (auto jt = it->second.begin(); jt != it->second.end(); jt ++) {
+                if (jt->get_course() == course_id) {
+                    if (!jt->get_remaining_spots()) {
                         result << "El curso " << course_id <<
                                " de la materia " << subject_id <<
                                " no posee más vacantes." << std::endl;
                         return result.str();
                     }
 
-                    bool subbed = c.subscribe(student);
+                    bool subbed = jt->subscribe(student);
                     if (!subbed) {
                         result << "Inscripción ya realizada." << std::endl;
                         return result.str();
                     }
                     result << "Inscripción exitosa." << std::endl;
-                    
+
                     return result.str();
                 }
             }

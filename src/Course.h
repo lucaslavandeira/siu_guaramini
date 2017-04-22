@@ -3,7 +3,7 @@
 
 #include <string>
 #include <unordered_set>
-#include <vector>
+#include <set>
 
 class Course {
     int course_id;
@@ -11,12 +11,12 @@ class Course {
     std::string teacher;
     int quota;
 
-    std::vector<int> students;
+    std::set<int> students;
 public:
     Course(int course_id, std::string name,
            std::string teacher, int quota);
 
-    bool subscribe(int student_id);
+    bool subscribe(const int& student_id);
 
     int get_course();
     std::string get_name();

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <utility>
+#include <set>
 
 #include "Course.h"
 
@@ -17,9 +18,8 @@ int Course::get_course() {
     return course_id;
 }
 
-bool Course::subscribe(int student_id) {
-    std::cout << students.size();
-    if (!get_remaining_spots()) {
+bool Course::subscribe(const int& student_id) {
+    if (get_remaining_spots() == 0) {
         throw 0;
     }
 
@@ -28,8 +28,7 @@ bool Course::subscribe(int student_id) {
             return false;
         }
     }
-    students.push_back(student_id);
-    std::cout << students.size();
+    students.insert(student_id);
     return true;
 }
 
