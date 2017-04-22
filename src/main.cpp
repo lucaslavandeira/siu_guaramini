@@ -35,12 +35,6 @@ std::string parse_command(std::string& input) {
 }
 
 int main(int argc, char** argv) {
-   /*std::fstream f;
-    f.open("materias.txt");
-    char line[256];
-    f.getline(line, 256);
-    std::string input(line);*/
-
     if (argc < 4) {
         return 0;
     }
@@ -52,7 +46,6 @@ int main(int argc, char** argv) {
         user_type += "-";
         user_type += user_id;  // 4 = user id
     }
-
 
     std::string input;
     Client c(argv[1], port, argv[3]);

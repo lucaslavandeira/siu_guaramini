@@ -11,6 +11,14 @@ Server::Server(int port) :
     s("localhost", port)
 {
     TSVParser parser("materias.txt");
+
+    while (!parser.eof()) {
+        std::vector<std::string> row = parser.parse_row();
+        for(std::string arg : row) {
+            std::cout << "Server prints: " << arg << std::endl;
+        }
+    }
+
 }
 
 std::string Server::receive(const std::string &msg) {
