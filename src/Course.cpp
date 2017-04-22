@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
-#include <sstream>
+#include <utility>
+
 #include "Course.h"
 
 Course::Course(int course_id, std::string name,
@@ -16,8 +17,20 @@ int Course::get_course() {
     return course_id;
 }
 
-void Course::subscribe(int student_id) {
+bool Course::subscribe(int student_id) {
+    std::cout << students.size();
+    if (!get_remaining_spots()) {
+        throw 0;
+    }
+
+    for (int student : students) {
+        if (student == student_id) {
+            return false;
+        }
+    }
     students.push_back(student_id);
+    std::cout << students.size();
+    return true;
 }
 
 std::string Course::get_name() {

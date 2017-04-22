@@ -6,6 +6,8 @@
 #include "Server.h"
 #include "common_split.h"
 
+const int student = 1; // Temporary until sockets introduced
+
 Server::~Server() {
 }
 
@@ -76,5 +78,34 @@ std::string Server::listSubjects() {
 }
 
 std::string Server::subscribe(int subject_id, int course_id) {
-    return "";
+    std::stringstream result;
+    for (std::pair<const int, std::vector<Course>> pair: subjects) {
+        if (pair.first == subject_id) {
+            for (Course& c: pair.second) {
+                if (c.get_course() == course_id) {
+                    if (!c.get_remaining_spots()) {
+                        result << "El curso " << course_id <<
+                               " de la materia " << subject_id <<
+                               " no posee más vacantes." << std::endl;
+                        return result.str();
+                    }
+
+                    bool subbed = c.subscribe(student);
+                    if (!subbed) {
+                        result << "Inscripción ya realizada." << std::endl;
+                        return result.str();
+                    }
+                    result << "Inscripción exitosa." << std::endl;
+                    
+                    return result.str();
+                }
+            }
+            result << "El curso " << course_id << " en la materia " <<
+                   subject_id << " no es válido." << std::endl;
+            return result.str();
+        }
+    }
+    result << "La materia " << subject_id << " no es válida." << std::endl;
+
+    return result.str();
 }

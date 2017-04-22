@@ -2,6 +2,7 @@
 #define TP3TALLER_COURSE_H
 
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 class Course {
@@ -15,7 +16,7 @@ public:
     Course(int course_id, std::string name,
            std::string teacher, int quota);
 
-    void subscribe(int student_id);
+    bool subscribe(int student_id);
 
     int get_course();
     std::string get_name();
