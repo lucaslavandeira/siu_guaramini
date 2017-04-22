@@ -6,12 +6,12 @@ class Course {
     int subject_id;
     int course_id;
     std::string name;
-    int teacher_id;
+    std::string teacher;
     int quota;
     int subs = 0;
 public:
     Course(int subject_id, int course_id, std::string name,
-           int teacher_id, int quota);
+           std::string teacher, int quota);
 
     std::string print();
 };
