@@ -12,6 +12,6 @@ Client::~Client() {
 std::string Client::send(std::string msg) {
     s.send(msg);
     std::string response;
-    s.recv(response);
+    s.receive(0);
     return response;
 }

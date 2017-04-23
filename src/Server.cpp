@@ -24,7 +24,7 @@ Server::Server(int port) :
         } else if (row.at(0) == "alumno") {
             students[id] = row.at(2);
         } else {
-            throw 0;
+            throw "oeoe";
         }
     }
 

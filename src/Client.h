@@ -2,7 +2,7 @@
 #define TP3TALLER_CLIENT_H
 
 
-#include "Socket.h"
+#include "common_socket.h"
 #include <string>
 
 class Client {

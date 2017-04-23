@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "Socket.h"
-#include "TSVParser.h"
-#include "Course.h"
+#include "common_socket.h"
+#include "server_TSVParser.h"
+#include "server_Course.h"
 
 class Server {
     Socket s;

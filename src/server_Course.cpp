@@ -3,7 +3,8 @@
 #include <utility>
 #include <set>
 
-#include "Course.h"
+#include "server_Course.h"
+
 
 Course::Course(int course_id, std::string name,
                std::string teacher, int quota) :

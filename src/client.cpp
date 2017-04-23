@@ -1,12 +1,9 @@
 #include <iostream>
-#include <fstream>
-#include <string>
 #include <vector>
+#include <string>
 #include <map>
-#include "common_split.h"
 #include "common_socket.h"
-#include "Client.h"
-#include "Server.h"
+#include "common_split.h"
 
 const std::map<std::string, std::string> commands {
         {std::string("listarMaterias"), std::string("lm")},
@@ -35,32 +32,24 @@ std::string parse_command(std::string& input) {
 }
 
 int main(int argc, char** argv) {
-    if (argc < 4) {
-        return 0;
-    }
+    Socket s("127.0.0.1", 8000);
 
-    int port = atoi(argv[2]);
-    char* user_id = argv[4];
-
+    std::string first_msg;
+    first_msg += argv[2];
+    first_msg += "-";
+    first_msg += argv[3];
+    s.send(first_msg);
 
     std::string input;
-    Client c(argv[1], port, argv[3]);
-    Server s(port);
-    std::string first_msg;
-    first_msg += argv[3];
-    first_msg += "-";
-    first_msg += argv[4];
-    s.receive(first_msg);
     while (1) {
         getline(std::cin, input);
         std::string result = parse_command(input);
-        c.send(result);
-        std::string response = s.receive(result);
-        if (response == "quit") {
+        s.send(result);
+        std::string response = s.receive();
+        std::cout << response;
+        if (!response.size()) {
             break;
         }
-        std::cout << response;
     }
-
-    return 0;
+    return 1;
 }
