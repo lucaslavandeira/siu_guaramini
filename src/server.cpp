@@ -20,32 +20,34 @@ int main(int argc, char** argv) {
     std::vector<std::string> args = split(first_msg, '-');
     std::cerr << args[0] << " " << args[1] << " conectado." << std::endl;
 
-    Student user(d, std::stoi(args[1]));
+    User* user = new Student(d, std::stoi(args[1]));
 
-    while (1) {
-        std::string command = protocol_receive(client);
-        if (command == "quit") {
-            break;
-        }
+    std::string command = protocol_receive(client);
+    while (command != "quit") {
         std::vector<std::string> cmds = split(command, '-');
         std::cerr << args[0] << " " << args[1] <<
                   " ejecuta " << cmds[0] << std::endl;
 
+
+        // Generate a response
         std::string response;
-        if (command == "lm") {
-            response = user.listSubjects();
-        } else if (command == "li") {
-            response = user.listSubs();
-        } else if (command == "in") {
+        if (cmds[0] == "lm") {
+            response = user->listSubjects();
+        } else if (cmds[0] == "li") {
+            response = user->listSubs();
+        } else if (cmds[0] == "in") {
             response = "Not implemented yet!\n";
-        } else if (command == "de") {
+        } else if (cmds[0] == "de") {
             response = "Not implemented yet!\n";
         } else {
-            response = "Should never happen";
+            response = "Should never happen\n";
         }
 
         protocol_send(client, response.c_str(),
                       (unsigned int) response.length() + 1); // len + '\0' char
+        command = protocol_receive(client);
     }
+
+    std::cerr << args[0] << " " << args[1] << " desconectado." << std::endl;
     return 0;
 }

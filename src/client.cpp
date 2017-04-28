@@ -42,8 +42,7 @@ int main(int argc, char** argv) {
     protocol_send(s, first_msg.c_str(), (unsigned int) first_msg.length() + 1);
 
     std::string input;
-    while (1) {
-        getline(std::cin, input);
+    while (getline(std::cin, input)) {
         std::string result = parse_command(input);
         if (result == "") {
             std::cout << "Comando inválido." << std::endl;
@@ -51,12 +50,9 @@ int main(int argc, char** argv) {
         }
         protocol_send(s, result.c_str(), (unsigned int) result.length() + 1);
         std::string response = protocol_receive(s);
-        if (response == "") { // End connection
-            protocol_send(s, "quit", 5);
-            break;
-        }
-
         std::cout << response;
     }
+
+    protocol_send(s, "quit", 5);
     return 0;
 }
