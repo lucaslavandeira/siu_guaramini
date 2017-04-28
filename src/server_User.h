@@ -12,8 +12,8 @@ public:
     explicit User(Database& database);
     std::string listSubjects();
     virtual std::string listSubs() = 0;
-    //virtual std::string subscribe() = 0;
-    //virtual std::string desubscribe() = 0;
+    virtual std::string subscribe(int subject_id, int course_id) = 0;
+    virtual std::string unsubscribe(int subject_id, int course_id) = 0;
     virtual ~User();
 };
 

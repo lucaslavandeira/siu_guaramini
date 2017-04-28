@@ -7,11 +7,15 @@
 
 class Student : public User {
     int id;
+
+
 public:
     Student(Database& database, int id);
+
     std::string listSubs();
-    //std::string subscribe(int subject_id, int course_id);
-    //std::string desubscribe(int subject_id, int course_id);
+    std::string subscribe(int subject_id, int course_id);
+    std::string unsubscribe(int subject_id, int course_id);
+    ~Student();
 };
 
 

@@ -28,6 +28,11 @@ std::string parse_command(std::string& input) {
     for (auto it = params.begin()+1; it != params.end(); it ++) {
         result += "-" + *it;
     }
+
+    // Not enough arguments for the specified commands
+    if ((cmd == "in" || cmd == "de") && params.size() < 3) {
+        return "";
+    }
     return result;
 }
 
