@@ -20,26 +20,32 @@ int main(int argc, char** argv) {
     std::vector<std::string> args = split(first_msg, '-');
     std::cerr << args[0] << " " << args[1] << " conectado." << std::endl;
 
-    Student student(d, std::stoi(args[1]));
+    Student user(d, std::stoi(args[1]));
 
     while (1) {
         std::string command = protocol_receive(client);
-        if (command == "") {
+        if (command == "quit") {
             break;
         }
         std::vector<std::string> cmds = split(command, '-');
         std::cerr << args[0] << " " << args[1] <<
                   " ejecuta " << cmds[0] << std::endl;
 
-        protocol_send(client, "Hola\n", 6);
-        continue;
+        std::string response;
         if (command == "lm") {
-            client.send(student.listSubjects().c_str(), 0);
+            response = user.listSubjects();
         } else if (command == "li") {
-            client.send(student.listSubs().c_str(), 0);
+            response = user.listSubs();
         } else if (command == "in") {
-            client.send("", 0);
+            response = "Not implemented yet!\n";
+        } else if (command == "de") {
+            response = "Not implemented yet!\n";
+        } else {
+            response = "Should never happen";
         }
+
+        protocol_send(client, response.c_str(),
+                      (unsigned int) response.length() + 1); // len + '\0' char
     }
     return 0;
 }
