@@ -32,3 +32,5 @@
 cmake-build-debug
 tp
 CMakeLists.txt
+src/server
+src/client
