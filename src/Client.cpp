@@ -10,7 +10,7 @@ Client::~Client() {
 }
 
 std::string Client::send(std::string msg) {
-    s.send(msg);
+    s.send(msg, 0);
     std::string response;
     s.receive(0);
     return response;

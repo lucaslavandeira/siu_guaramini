@@ -83,24 +83,14 @@ Socket::Socket(Socket&& other) {
     fd = std::move(other.fd);
 }
 
-ssize_t Socket::send(const std::string msg) {
-    if (!msg.size()) {
-        throw ConnectionError("Can't send empty messages through socket");
-    }
+ssize_t Socket::send(const char *msg, unsigned int len) {
     size_t total_bytes = 0;
     ssize_t sent = 1;
 
-    int len = htonl((int) msg.size());
-    while (total_bytes < 4 && sent) {
-        sent = ::send(fd, &len + total_bytes, sizeof(len), MSG_NOSIGNAL);
-        if (sent < 0) {
-            throw ConnectionError("Error sending msg len");
-        }
-        total_bytes += sent;
-    }
-    total_bytes = 0;
-    while (total_bytes < msg.size() && sent) {
-        sent = ::send(fd, msg.c_str() + total_bytes, msg.size() - total_bytes,
+    // Sends msg until it's complete OR socket_send returns 0 (connection
+    // closed)
+    while (total_bytes < len && sent) {
+        sent = ::send(fd, msg + total_bytes, len - total_bytes,
                       MSG_NOSIGNAL);
         if (sent < 0) {
             throw ConnectionError("Error sending msg %s", msg);
@@ -111,40 +101,25 @@ ssize_t Socket::send(const std::string msg) {
     return total_bytes;
 }
 
-std::string Socket::receive() {
+ssize_t Socket::receive(char *dest, size_t len) {
     ssize_t received = 1;
     size_t total_bytes = 0;
 
-    uint32_t len = 0;
-    while (total_bytes < 4 && received) {
-        received = recv(fd, &len + total_bytes, sizeof(len), MSG_NOSIGNAL);
+    // Writes to dest until it's complete OR socket_recv returns 0 (connection
+    // closed)
+    while (total_bytes < len && received) {
+        received = recv(fd, dest + total_bytes, len - total_bytes,
+                        MSG_NOSIGNAL);
         if (received < 0) {
-            throw ConnectionError("Error receiving message len!");
+            throw ConnectionError("Error receiving message!");
         }
         total_bytes += received;
     }
-
-    len = ntohl(len);
-
-    std::string result;
-    char buf[BUF_SIZE] = "";
-    while (result.size() < len && received) {
-        // Clear buffer from prev read to ensure '\0' is in the correct place
-        memset(buf, 0, BUF_SIZE);
-
-        size_t read = BUF_SIZE;
-        if (read > len - result.size()) {
-            read = len - result.size();
-        }
-        received = recv(fd, buf, read, MSG_NOSIGNAL);
-        if (received < 0) {
-        }
-        result += buf;
-    }
-    return result;
+    return total_bytes;
 }
 
 
 Socket::~Socket() {
     close(fd);
 }
+

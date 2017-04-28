@@ -2,9 +2,10 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <netinet/in.h>
 #include "common_socket.h"
 #include "common_split.h"
-
+#include "common_protocol_socket.h"
 const std::map<std::string, std::string> commands {
         {std::string("listarMaterias"), std::string("lm")},
         {std::string("listarInscripciones"), std::string("li")},
@@ -18,7 +19,6 @@ std::string parse_command(std::string& input) {
     try {
         cmd = commands.at(params.at(0));
     } catch (std::out_of_range) {
-        std::cout << "Wrong command!" << std::endl;
         return "";
     }
 
@@ -32,24 +32,30 @@ std::string parse_command(std::string& input) {
 }
 
 int main(int argc, char** argv) {
-    Socket s("127.0.0.1", 8000);
+    Socket s("127.0.0.1", atoi(argv[2]));
 
     std::string first_msg;
-    first_msg += argv[2];
-    first_msg += "-";
     first_msg += argv[3];
-    s.send(first_msg);
+    first_msg += "-";
+    first_msg += argv[4];
+
+    protocol_send(s, first_msg.c_str(), (unsigned int) first_msg.length() + 1);
 
     std::string input;
     while (1) {
         getline(std::cin, input);
         std::string result = parse_command(input);
-        s.send(result);
-        std::string response = s.receive();
-        std::cout << response;
-        if (!response.size()) {
+        if (result == "") {
+            std::cout << "Comando inválido." << std::endl;
+            continue;
+        }
+        protocol_send(s, result.c_str(), (unsigned int) result.length() + 1);
+        std::string response = protocol_receive(s);
+        if (response == "") {
             break;
         }
+
+        std::cout << response;
     }
     return 1;
 }

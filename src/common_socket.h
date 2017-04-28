@@ -13,8 +13,8 @@ public:
 
     Socket accept_client();
 
-    ssize_t send(const std::string msg);
-    std::string receive();
+    ssize_t send(const char *msg, unsigned int len);
+    ssize_t receive(char *dest, size_t len);
 
     Socket(Socket&& other);
 private:
