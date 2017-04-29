@@ -7,11 +7,11 @@
 
 
 Course::Course(int subject_id, int course_id, std::string name,
-               std::string teacher, int quota) :
+               int teacher_id, int quota) :
     subject_id(subject_id),
     course_id(course_id),
     name(name),
-    teacher(teacher),
+    teacher_id(teacher_id),
     quota(quota)
 {
 }
@@ -46,8 +46,8 @@ std::string Course::get_name() const {
     return name;
 }
 
-std::string Course::get_teacher() const {
-    return teacher;
+int Course::get_teacher() const {
+    return teacher_id;
 }
 
 int Course::get_remaining_spots() const {
@@ -60,5 +60,9 @@ bool Course::is_subscribed(int student_id) const {
 
 int Course::get_subject() const  {
     return subject_id;
+}
+
+const std::set<int>& Course::get_students() const {
+    return students;
 }
 

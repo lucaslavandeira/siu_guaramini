@@ -2,6 +2,7 @@
 #define TP3TALLER_USER_H
 
 #include <string>
+#include <vector>
 #include "server_Database.h"
 
 class User {
@@ -11,9 +12,7 @@ protected:
 public:
     explicit User(Database& database);
     std::string listSubjects();
-    virtual std::string listSubs() = 0;
-    virtual std::string subscribe(int subject_id, int course_id) = 0;
-    virtual std::string unsubscribe(int subject_id, int course_id) = 0;
+    virtual std::string process_command(std::vector<std::string>& args) = 0;
     virtual ~User();
 };
 

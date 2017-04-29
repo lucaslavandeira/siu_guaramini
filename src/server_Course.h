@@ -2,20 +2,19 @@
 #define TP3TALLER_COURSE_H
 
 #include <string>
-#include <unordered_set>
 #include <set>
 
 class Course {
     int subject_id;
     int course_id;
     std::string name;
-    std::string teacher;
+    int teacher_id;
     int quota;
 
     std::set<int> students;
 public:
     Course(int subject, int course_id, std::string name,
-           std::string teacher, int quota);
+           int teacher_id, int quota);
 
     bool subscribe(int student_id);
     bool desubscribe(int student_id);
@@ -23,8 +22,9 @@ public:
     int get_subject() const;
     int get_course() const;
     std::string get_name() const;
-    std::string get_teacher() const;
+    int get_teacher() const;
     int get_remaining_spots() const;
+    const std::set<int>& get_students() const;
 };
 
 

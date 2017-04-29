@@ -4,6 +4,10 @@
 #include <utility>
 #include "server_Student.h"
 
+#define COMANDO 0
+#define MATERIA 1
+#define CURSO 2
+
 Student::Student(Database &database, int id) :
         User(database)
 {
@@ -15,7 +19,8 @@ std::string Student::listSubs() {
     for (const Course* c : subbed_courses) {
         result << c->get_subject() << " - " << c->get_name() <<
                ", Curso " << c->get_course() << ", " <<
-               c->get_teacher() << "." << std::endl;
+               database.teachers.find(c->get_teacher())->second << "." <<
+               std::endl;
     }
     return result.str();
 }
@@ -58,17 +63,39 @@ std::string Student::subscribe(int subject_id, int course_id) {
 }
 
 std::string Student::unsubscribe(int subject_id, int course_id) {
-    for (auto c = subbed_courses.begin(); c != subbed_courses.end(); c++) {
-        if ((*c)->get_course() == course_id &&
-                (*c)->get_subject() == subject_id) {
-            bool done = (*c)->desubscribe(this->id);
-            if (done) {
-                subbed_courses.erase(c);
-                return "Desinscripción exitosa\n";
+    auto subject = database.subjects.find(subject_id);
+    if (subject == database.subjects.end()) {
+        return "Desinscripción inválida.\n";
+    }
+
+    for (Course& c : subject->second) {
+        if (c.get_course() == course_id) {
+            if (c.is_subscribed(id)) {
+                c.desubscribe(id);
+                return "Desinscripción exitosa.\n";
             }
         }
     }
-    return "Desinscripción inválida\n";
+    return "Desinscripción inválida.\n";
+}
+
+
+std::string Student::process_command(std::vector<std::string>& args) {
+    std::string response;
+    if (args[COMANDO] == "lm") {
+        response = listSubjects();
+    } else if (args[COMANDO] == "li") {
+        response = listSubs();
+    } else if (args[COMANDO] == "in") {
+        response = subscribe(std::stoi(args[MATERIA]),
+                                     std::stoi(args[CURSO]));
+    } else if (args[COMANDO] == "de") {
+        response = unsubscribe(std::stoi(args[MATERIA]),
+                                       std::stoi(args[CURSO]));
+    } else {
+        response = "Should never happen\n";
+    }
+    return response;
 }
 
 Student::~Student() {
