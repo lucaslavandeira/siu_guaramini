@@ -2,12 +2,13 @@
 #define TP3TALLER_STUDENT_H
 
 #include <string>
+#include <list>
 #include "server_Database.h"
 #include "server_User.h"
 
 class Student : public User {
     int id;
-
+    std::list<Course*> subbed_courses;
 
 public:
     Student(Database& database, int id);

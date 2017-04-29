@@ -11,8 +11,8 @@ User::User(Database &database) :
 
 std::string User::listSubjects() {
     std::stringstream result;
-    for (std::pair<const int, std::vector<Course>> pair: database.subjects) {
-        for (Course c: pair.second) {
+    for (std::pair<const int, std::vector<Course>>& pair: database.subjects) {
+        for (const Course& c: pair.second) {
             result << pair.first << " - " << c.get_name() <<
                    ", Curso " << c.get_course() <<
                    ", " << c.get_teacher() << ", "

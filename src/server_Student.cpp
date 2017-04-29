@@ -10,17 +10,12 @@ Student::Student(Database &database, int id) :
     this->id = id;
 }
 
-
 std::string Student::listSubs() {
     std::stringstream result;
-    for (std::pair<const int, std::vector<Course>> pair: database.subjects) {
-        for (Course c: pair.second) {
-            if (c.is_subscribed(id)) {
-                result << pair.first << " - " << c.get_name() << ", Curso " <<
-                       c.get_course() << ", " << c.get_teacher() <<
-                       "." << std::endl;
-            }
-        }
+    for (const Course* c : subbed_courses) {
+        result << c->get_subject() << " - " << c->get_name() <<
+               ", Curso " << c->get_course() << ", " <<
+               c->get_teacher() << "." << std::endl;
     }
     return result.str();
 }
@@ -46,6 +41,7 @@ std::string Student::subscribe(int subject_id, int course_id) {
                         result << "Inscripción ya realizada." << std::endl;
                         return result.str();
                     }
+                    subbed_courses.push_back(&(*jt));
                     result << "Inscripción exitosa." << std::endl;
 
                     return result.str();
@@ -62,19 +58,13 @@ std::string Student::subscribe(int subject_id, int course_id) {
 }
 
 std::string Student::unsubscribe(int subject_id, int course_id) {
-    std::stringstream result;
-    for (auto it = database.subjects.begin();
-         it != database.subjects.end();
-         it ++) {
-        if (it->first == subject_id) {
-            for (auto jt = it->second.begin(); jt != it->second.end(); jt++) {
-                if (jt->get_course() == course_id) {
-                    bool done = jt->desubscribe(this->id);
-                    if (done) {
-                        return "Desinscripción exitosa\n";
-                    }
-                    break;
-                }
+    for (auto c = subbed_courses.begin(); c != subbed_courses.end(); c++) {
+        if ((*c)->get_course() == course_id &&
+                (*c)->get_subject() == subject_id) {
+            bool done = (*c)->desubscribe(this->id);
+            if (done) {
+                subbed_courses.erase(c);
+                return "Desinscripción exitosa\n";
             }
         }
     }

@@ -3,7 +3,7 @@
 #include <string>
 #include "common_protocol_socket.h"
 
-
+#define MSG_SIZE 256
 void protocol_send(Socket& s, const char* msg, unsigned int len) {
     uint32_t network_len = htonl(len);
     s.send((char*) &network_len, sizeof(network_len));
@@ -14,7 +14,8 @@ std::string protocol_receive(Socket& s) {
     uint32_t len = 0;
     s.receive((char*) &len, sizeof(len));
     len = ntohl(len);
-    char* buf = new char[len];
+    char buf[MSG_SIZE] = "";
     s.receive(buf, len);
-    return std::string(buf);
+    std::string result(buf);
+    return result;
 }

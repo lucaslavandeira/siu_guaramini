@@ -6,6 +6,7 @@
 #include <set>
 
 class Course {
+    int subject_id;
     int course_id;
     std::string name;
     std::string teacher;
@@ -13,16 +14,17 @@ class Course {
 
     std::set<int> students;
 public:
-    Course(int course_id, std::string name,
+    Course(int subject, int course_id, std::string name,
            std::string teacher, int quota);
 
     bool subscribe(int student_id);
     bool desubscribe(int student_id);
-    bool is_subscribed(int student_id);
-    int get_course();
-    std::string get_name();
-    std::string get_teacher();
-    int get_remaining_spots();
+    bool is_subscribed(int student_id) const;
+    int get_subject() const;
+    int get_course() const;
+    std::string get_name() const;
+    std::string get_teacher() const;
+    int get_remaining_spots() const;
 };
 
 

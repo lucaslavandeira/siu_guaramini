@@ -6,8 +6,9 @@
 #include "server_Course.h"
 
 
-Course::Course(int course_id, std::string name,
+Course::Course(int subject_id, int course_id, std::string name,
                std::string teacher, int quota) :
+    subject_id(subject_id),
     course_id(course_id),
     name(name),
     teacher(teacher),
@@ -15,7 +16,7 @@ Course::Course(int course_id, std::string name,
 {
 }
 
-int Course::get_course() {
+int Course::get_course() const {
     return course_id;
 }
 
@@ -41,19 +42,23 @@ bool Course::desubscribe(int student_id) {
     return erased != 0;
 }
 
-std::string Course::get_name() {
+std::string Course::get_name() const {
     return name;
 }
 
-std::string Course::get_teacher() {
+std::string Course::get_teacher() const {
     return teacher;
 }
 
-int Course::get_remaining_spots() {
+int Course::get_remaining_spots() const {
     return (int) (quota - students.size());
 }
 
-bool Course::is_subscribed(int student_id) {
+bool Course::is_subscribed(int student_id) const {
     return students.find(student_id) != students.end();
+}
+
+int Course::get_subject() const  {
+    return subject_id;
 }
 

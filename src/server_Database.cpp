@@ -46,7 +46,7 @@ Database::Database(char *users, char *subjects)
         std::string teacher = teachers.at(teacher_id).c_str();
         int quota = std::stoi(row.at(4));
 
-        Course course(course_id, name, teacher, quota);
+        Course course(subject_id, course_id, name, teacher, quota);
 
         // Create if it doesn't already exist
         if (this->subjects.find(subject_id) == this->subjects.end()) {

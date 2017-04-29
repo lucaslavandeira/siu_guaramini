@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
     std::vector<std::string> args = split(first_msg, '-');
     std::cerr << args[TIPO] << " " << args[ID] << " conectado." << std::endl;
 
-    User* user = new Student(d, std::stoi(args[ID]));
+    User&& user = Student(d, std::stoi(args[ID]));
 
     std::string command = protocol_receive(client);
     while (command != "quit") {
@@ -39,14 +39,14 @@ int main(int argc, char** argv) {
         // Generate a response
         std::string response;
         if (cmds[COMANDO] == "lm") {
-            response = user->listSubjects();
+            response = user.listSubjects();
         } else if (cmds[COMANDO] == "li") {
-            response = user->listSubs();
+            response = user.listSubs();
         } else if (cmds[COMANDO] == "in") {
-            response = user->subscribe(std::stoi(cmds[MATERIA]),
+            response = user.subscribe(std::stoi(cmds[MATERIA]),
                                        std::stoi(cmds[CURSO]));
         } else if (cmds[COMANDO] == "de") {
-            response = user->unsubscribe(std::stoi(cmds[MATERIA]),
+            response = user.unsubscribe(std::stoi(cmds[MATERIA]),
                                          std::stoi(cmds[CURSO]));
         } else {
             response = "Should never happen\n";
