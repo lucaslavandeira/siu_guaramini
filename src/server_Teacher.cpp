@@ -73,10 +73,16 @@ std::string Teacher::process_command(std::vector<std::string>& args) {
     } else if (args[COMANDO] == "li") {
         response = listSubs();
     } else if (args[COMANDO] == "in") {
+        if (args.size() < 4) {
+            return "Cantidad de argumentos insuficientes.\n";
+        }
         response = subscribe(std::stoi(args[ALUMNO]),
                              std::stoi(args[MATERIA]),
                              std::stoi(args[CURSO]));
     } else if (args[COMANDO] == "de") {
+        if (args.size() < 4) {
+            return "Cantidad de argumentos insuficientes.\n";
+        }
         response = unsubscribe(std::stoi(args[ALUMNO]),
                                std::stoi(args[MATERIA]),
                                std::stoi(args[CURSO]));
@@ -84,4 +90,10 @@ std::string Teacher::process_command(std::vector<std::string>& args) {
         response = "Should never happen\n";
     }
     return response;
+}
+
+std::string Teacher::get_identifier() {
+    std::stringstream result;
+    result << "docente " << course.get_teacher();
+    return result.str();
 }

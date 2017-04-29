@@ -13,6 +13,7 @@ public:
     explicit User(Database& database);
     std::string listSubjects();
     virtual std::string process_command(std::vector<std::string>& args) = 0;
+    virtual std::string get_identifier() = 0;
     virtual ~User();
 };
 

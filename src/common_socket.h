@@ -16,6 +16,7 @@ public:
     ssize_t send(const char *msg, unsigned int len);
     ssize_t receive(char *dest, size_t len);
 
+    // Move constructor
     Socket(Socket&& other);
 private:
     Socket();

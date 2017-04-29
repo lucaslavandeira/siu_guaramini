@@ -100,3 +100,9 @@ std::string Student::process_command(std::vector<std::string>& args) {
 
 Student::~Student() {
 }
+
+std::string Student::get_identifier() {
+    std::stringstream result;
+    result << "alumno " << id;
+    return result.str();
+}

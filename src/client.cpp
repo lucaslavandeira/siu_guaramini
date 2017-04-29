@@ -41,8 +41,11 @@ int main(int argc, char** argv) {
 
     std::string first_msg;
     first_msg += argv[3];
-    first_msg += "-";
-    first_msg += argv[4];
+    if (argv[4]) {
+        first_msg += "-";
+        first_msg += argv[4];
+    }
+
 
     protocol_send(s, first_msg.c_str(), (unsigned int) first_msg.length() + 1);
 
