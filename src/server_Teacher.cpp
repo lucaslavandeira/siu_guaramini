@@ -16,9 +16,10 @@ Teacher::Teacher(Database &database, Course& course) :
 
 std::string Teacher::listSubs() {
     std::stringstream result;
+    std::string teacher = database.teachers[course.get_teacher()];
 
     result << course.get_subject() << " - " << course.get_name() <<
-           ", Curso " << course.get_course() << ", " << course.get_teacher() <<
+           ", Curso " << course.get_course() << ", " << teacher <<
            ":\n";
 
     for (int student_id : course.get_students()) {

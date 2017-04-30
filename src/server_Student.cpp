@@ -9,19 +9,26 @@
 #define CURSO 2
 
 Student::Student(Database &database, int id) :
-        User(database)
+        User(database),
+        id(id)
 {
-    this->id = id;
 }
 
 std::string Student::listSubs() {
     std::stringstream result;
-    for (const Course* c : subbed_courses) {
-        result << c->get_subject() << " - " << c->get_name() <<
-               ", Curso " << c->get_course() << ", " <<
-               database.teachers.find(c->get_teacher())->second << "." <<
-               std::endl;
+    for (auto it = database.subjects.begin();
+        it != database.subjects.end();
+        it ++) {
+        for (Course& c : it->second) {
+            if (c.is_subscribed(id)) {
+                result << c.get_subject() << " - " << c.get_name() <<
+                       ", Curso " << c.get_course() << ", " <<
+                       database.teachers.find(c.get_teacher())->second << "." <<
+                       std::endl;
+            }
+        }
     }
+
     return result.str();
 }
 
@@ -46,7 +53,6 @@ std::string Student::subscribe(int subject_id, int course_id) {
                         result << "Inscripción ya realizada." << std::endl;
                         return result.str();
                     }
-                    subbed_courses.push_back(&(*jt));
                     result << "Inscripción exitosa." << std::endl;
 
                     return result.str();
@@ -71,7 +77,7 @@ std::string Student::unsubscribe(int subject_id, int course_id) {
     for (Course& c : subject->second) {
         if (c.get_course() == course_id) {
             if (c.is_subscribed(id)) {
-                c.desubscribe(id);
+                c.unsubscribe(id);
                 return "Desinscripción exitosa.\n";
             }
         }

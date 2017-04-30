@@ -2,18 +2,35 @@
 #define TP3TALLER_CLIENTACCEPTER_H
 
 #include <string>
+#include <list>
 #include "server_Thread.h"
 #include "common_socket.h"
+#include "server_Database.h"
+#include "server_User.h"
+#include "server_ClientThread.h"
 
+/* Thread that accepts incoming client connections, and creates new threads for
+ * their command processing. Once running, it'll continuously wait to accept
+ * clients from the server socket. */
 class ClientAccepter : public Thread {
-    Socket& s;
-    bool running = false;
+    Socket s;
+    Database& d;
+    int port;
+    std::list<ClientThread> clients;
+    bool running;
 
-    explicit ClientAccepter(Socket s);
+public:
+    explicit ClientAccepter(Socket& server, Database& d, int port);
 
-    void run();
-    void terminate();
+
+    // Stops the server socket, to be used when the server is shutting down
+    void kill();
     ~ClientAccepter();
+
+private:
+    // Starts the thread, runs a while loop until the socket shuts down
+    void run();
+    User* validate_client(std::string first_msg);
 };
 
 #endif //TP3TALLER_CLIENTACCEPTER_H

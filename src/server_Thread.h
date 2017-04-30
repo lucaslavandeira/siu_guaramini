@@ -3,7 +3,7 @@
 
 #include <thread>
 
-// Abstract thread class, implemented in this project by IDSThread
+// Abstract thread class
 class Thread {
     std::thread thread;
 
@@ -11,7 +11,7 @@ public:
     void start();
     void join();
     virtual ~Thread();
-
+    bool joinable();
 protected:
     virtual void run() = 0;
 };

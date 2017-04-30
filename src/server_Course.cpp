@@ -33,7 +33,7 @@ bool Course::subscribe(int student_id) {
     return true;
 }
 
-bool Course::desubscribe(int student_id) {
+bool Course::unsubscribe(int student_id) {
     if (get_remaining_spots() == 0) {
         throw 0;
     }

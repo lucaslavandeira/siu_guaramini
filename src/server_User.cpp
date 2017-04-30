@@ -15,7 +15,7 @@ std::string User::listSubjects() {
         for (const Course& c: pair.second) {
             result << pair.first << " - " << c.get_name() <<
                    ", Curso " << c.get_course() <<
-                   ", " << database.teachers.find(c.get_teacher())->second
+                   ", " << database.teachers[c.get_teacher()]
                    << ", " << c.get_remaining_spots() << " vacantes." <<
                                                                       std::endl;
         }

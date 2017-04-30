@@ -6,6 +6,8 @@
 #include <string>
 #include "server_Course.h"
 
+
+/* Struct that packs the loaded courses and users of the server database. */
 struct Database {
     std::map<int, std::vector<Course>> subjects;
     std::map<int, std::string> students;

@@ -1,4 +1,3 @@
-#include <unistd.h>
 #include <netinet/in.h>
 #include <string>
 #include "common_protocol_socket.h"

@@ -2,10 +2,11 @@
 #include <vector>
 #include <string>
 #include <map>
-#include <netinet/in.h>
 #include "common_socket.h"
 #include "common_split.h"
 #include "common_protocol_socket.h"
+
+
 const std::map<std::string, std::string> commands {
         {std::string("listarMaterias"), std::string("lm")},
         {std::string("listarInscripciones"), std::string("li")},
@@ -13,7 +14,12 @@ const std::map<std::string, std::string> commands {
         {std::string("desinscribir"), std::string("de")}
 };
 
+
+
 std::string parse_command(std::string& input) {
+    /* Parses a command and its arguments into a single string of the format
+     * [command_id]-[arg1]-...-[argN], that the server can understand.
+     * If the passed command is not valid, returns "" (empty string). */
     std::vector<std::string> params = split(input, ' ');
     std::string cmd;
     try {
@@ -37,7 +43,19 @@ std::string parse_command(std::string& input) {
 }
 
 int main(int argc, char** argv) {
-    Socket s("127.0.0.1", atoi(argv[2]));
+    /* Runs a client for the subscription system. Reads the following arguments
+     * from the command line:
+     * argv[1]: server address
+     * argv[2]: server port
+     * argv[3]: user mode, one of the following: 'alumno', 'docente', 'admin'
+     * argv[4]: ID if the user mode is 'alumno' or 'docente', none for admin.
+     *
+     * The program always returns 0.
+     */
+    if (argc < 3) {
+        return 1;
+    }
+    Socket s(argv[1], atoi(argv[2]));
 
     std::string first_msg;
     first_msg += argv[3];
