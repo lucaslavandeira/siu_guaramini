@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstring>
 #include "common_split.h"
 #include "server_TSVParser.h"
 
@@ -8,8 +9,7 @@ TSVParser::TSVParser(const char *path) :
     f(std::ifstream(path))
 {
     if (!f.good()) {
-        std::cout << "Error opening file " << path << std::endl;
-        throw 0;
+        throw IOError("hehe");
     }
 }
 
@@ -22,7 +22,8 @@ std::vector<std::string> TSVParser::parse_row() {
     f.getline(line, 256);
     std::string input(line);
     if (f.eof()) {
-        throw 1;
+        std::vector<std::string> a;
+        return a;
     }
 
     std::vector<std::string> row = split(input, '\t');
@@ -33,3 +34,10 @@ bool TSVParser::eof() {
     return f.peek() == EOF;
 }
 
+IOError::IOError(const char *msg, ...) noexcept {
+    strncpy(buf, msg, strlen(msg));
+}
+
+const char *IOError::what() const noexcept {
+    return buf;
+}

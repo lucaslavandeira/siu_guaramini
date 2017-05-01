@@ -5,6 +5,7 @@
 #include "server_Thread.h"
 #include "common_socket.h"
 #include "server_User.h"
+#include "server_PrintMonitor.h"
 
 /* Thread that receives messages from the socket in a while loop and
  * processes them until the client disconnects or the terminate order is
@@ -12,9 +13,10 @@
 class ClientThread : public Thread {
     Socket s;
     User* user;
+    PrintMonitor& printer;
     bool done;
 public:
-    ClientThread(Socket& s, User* user);
+    ClientThread(Socket& s, User* user, PrintMonitor& printer);
     ~ClientThread();
 
     // True if the client has disconnected, false otherwise.

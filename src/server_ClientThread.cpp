@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <sstream>
 #include "server_ClientThread.h"
 #include "common_protocol_socket.h"
 #include "common_split.h"
@@ -14,9 +15,10 @@ const std::map<std::string, std::string> commands {
         {std::string("de"), std::string("desinscribir")}
 };
 
-ClientThread::ClientThread(Socket& s, User* user) :
+ClientThread::ClientThread(Socket& s, User* user, PrintMonitor& printer) :
         s(std::move(s)),
-        user(user)
+        user(user),
+        printer(printer)
 {
     done = false;
 }
@@ -26,9 +28,11 @@ void ClientThread::run() {
     std::string command = protocol_receive(s);
     while (command != "quit" && !done) {
         std::vector<std::string> cmds = split(command, '-');
-        std::cerr << user->get_identifier() <<
+        std::stringstream msg;
+        msg << user->get_identifier() <<
                   " ejecuta " << commands.at(cmds[COMANDO]) << ".\n";
 
+        printer.print(msg.str());
 
         // Generate a response
         std::string response = user->process_command(cmds);

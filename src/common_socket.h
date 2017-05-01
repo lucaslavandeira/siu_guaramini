@@ -29,7 +29,7 @@ public:
 
     // Wrapper for socket shutdown/close
     void shutdown();
-    void close();
+    void close(); // Effectively makes the socket object useless
     // Move constructor
     Socket(Socket&& other);
 
@@ -39,6 +39,7 @@ private:
     Socket(Socket&) = delete;
     void operator=(Socket&) = delete;
 };
+
 
 class SocketError : public std::exception {
     char buf[256];

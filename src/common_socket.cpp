@@ -11,8 +11,7 @@
 Socket::Socket(int port) {
     fd = socket(AF_INET, SOCK_STREAM, 0);
     if (fd < 0) {
-        perror("");
-        throw 0;
+        throw SocketError("Couldn't create a socket!\n");
     }
 
     struct sockaddr_in srv;
@@ -65,7 +64,7 @@ Socket::Socket() {
 
 Socket::Socket(Socket&& other) {
     fd = other.fd;
-    other.fd = -1;
+    other.fd = -1; // "Deactivates" other
 }
 
 ssize_t Socket::send(const char *msg, unsigned int len) {

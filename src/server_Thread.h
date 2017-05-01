@@ -11,7 +11,7 @@ public:
     void start();
     void join();
     virtual ~Thread();
-    bool joinable();
+
 protected:
     virtual void run() = 0;
 };

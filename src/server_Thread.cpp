@@ -12,6 +12,3 @@ void Thread::join() {
 Thread::~Thread() {
 }
 
-bool Thread::joinable() {
-    return thread.joinable();
-}

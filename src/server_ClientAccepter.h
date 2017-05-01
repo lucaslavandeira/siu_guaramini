@@ -8,6 +8,7 @@
 #include "server_Database.h"
 #include "server_User.h"
 #include "server_ClientThread.h"
+#include "server_PrintMonitor.h"
 
 /* Thread that accepts incoming client connections, and creates new threads for
  * their command processing. Once running, it'll continuously wait to accept
@@ -15,6 +16,8 @@
 class ClientAccepter : public Thread {
     Socket s;
     Database& d;
+    PrintMonitor printer;
+
     int port;
     std::list<ClientThread> clients;
     bool running;

@@ -1,14 +1,17 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
 #include "server_ClientAccepter.h"
 #include "common_protocol_socket.h"
 #include "common_split.h"
 #include "server_Student.h"
 #include "server_Admin.h"
+#include "server_PrintMonitor.h"
 
 #define TIPO 0
 #define ID 1
+
 ClientAccepter::ClientAccepter(Socket& server, Database& d, int port) :
     s(std::move(server)),
     d(d),
@@ -22,13 +25,15 @@ ClientAccepter::~ClientAccepter() {
 User* ClientAccepter::validate_client(std::string first_msg) {
     std::vector<std::string> args = split(first_msg, '-');
     User* user = nullptr;
+    std::stringstream msg;
     if (args[TIPO] == "alumno") {
         if (d.students.find(stoi(args[ID])) == d.students.end()) {
-            std::cerr << args[ID] << " es un tipo de usuario alumno inválido\n";
+            msg << args[ID] << " es un tipo de usuario alumno inválido\n";
+            printer.print(msg.str());
             return nullptr;
         }
         user = new Student(d, std::stoi(args[ID]));
-        std::cerr << "alumno " << args[ID] << " conectado."
+        msg << "alumno " << args[ID] << " conectado."
                   << std::endl;
     } else if (args[TIPO] == "docente") {
         bool found = false;
@@ -49,19 +54,22 @@ User* ClientAccepter::validate_client(std::string first_msg) {
         }
 
         if (!found) {
-            std::cerr << args[ID] << " es un tipo de usuario docente inválido";
+            msg << args[ID] << " es un tipo de usuario docente inválido";
+            printer.print(msg.str());
             return nullptr;
         }
-        std::cerr << "docente " << args[ID] << " conectado."
+        msg << "docente " << args[ID] << " conectado."
                   << std::endl;
     } else if (args[TIPO] == "admin") {
         args.push_back("");
         user = new Admin(d);
-        std::cerr << "admin conectado.\n";
+        msg << "admin conectado.\n";
     } else {
-        std::cerr << args[ID] << " es un tipo de usuario inválido.\n";
+        msg << args[ID] << " es un tipo de usuario inválido.\n";
+        printer.print(msg.str());
         return nullptr;
     }
+    printer.print(msg.str());
     return user;
 }
 
@@ -82,7 +90,7 @@ void ClientAccepter::run() {
                 continue;
             }
 
-            clients.emplace_back(new_client, user);
+            clients.emplace_back(new_client, user, printer);
             clients.back().start();
 
             // Clean up done threads

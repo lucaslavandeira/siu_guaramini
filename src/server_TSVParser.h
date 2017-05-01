@@ -21,4 +21,13 @@ public:
 };
 
 
+class IOError : public std::exception {
+    char buf[256];
+
+public:
+    explicit IOError(const char* msg, ...) noexcept;
+
+    virtual const char* what() const noexcept;
+};
+
 #endif //TP3TALLER_TSVPARSER_H

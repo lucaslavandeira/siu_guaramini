@@ -4,6 +4,7 @@
 #include <set>
 
 #include "server_Course.h"
+#include "server_Lock.h"
 
 
 Course::Course(int subject_id, int course_id, std::string name,
@@ -22,7 +23,7 @@ int Course::get_course() const {
 
 bool Course::subscribe(int student_id) {
     if (get_remaining_spots() == 0) {
-        throw 0;
+        return false;
     }
 
     if (students.find(student_id) != students.end()) {
@@ -35,7 +36,7 @@ bool Course::subscribe(int student_id) {
 
 bool Course::unsubscribe(int student_id) {
     if (get_remaining_spots() == 0) {
-        throw 0;
+        return false;
     }
 
     unsigned long erased = students.erase(student_id);

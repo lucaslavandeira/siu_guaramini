@@ -3,6 +3,7 @@
 
 #include <string>
 #include <set>
+#include <mutex>
 
 /* Represents a course where students can subscribe to. Courses have a limited
  * quota, once filled the course is full and students can't be subcribed
